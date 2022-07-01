@@ -6,13 +6,9 @@ import (
 	"log"
 
 	"github.com/dwivedi-ritik/filehost-go/db"
+	"github.com/dwivedi-ritik/filehost-go/models"
 	"github.com/gofiber/fiber/v2"
 )
-
-type UserPost struct {
-	Code  string `json:"code"`
-	Price uint   `json:"price"`
-}
 
 func home(c *fiber.Ctx) error {
 
@@ -26,7 +22,8 @@ func home(c *fiber.Ctx) error {
 }
 
 func homePost(c *fiber.Ctx) error {
-	p := new(UserPost)
+	// P itself a pointer
+	p := new(models.Product)
 	if c.GetReqHeaders()["Content-Type"] != "application/json" {
 		return c.SendStatus(400)
 	}
@@ -36,13 +33,21 @@ func homePost(c *fiber.Ctx) error {
 		return c.SendStatus(400)
 
 	}
-
+	db.AddRow(p)
 	return c.JSON(p)
 }
 
+func getFile(c *fiber.Ctx) error {
+	return c.Download("./temp.txt")
+}
+
 func main() {
+	// Make Migrations
+	db.MakeMigration()
+
 	app := fiber.New()
 	app.Get("/api", home).Post("/api", homePost)
+	app.Get("/api/file", getFile)
 	log.Fatal(app.Listen(":3000"))
 
 }
