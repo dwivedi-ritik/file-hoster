@@ -2,8 +2,10 @@ package models
 
 import "gorm.io/gorm"
 
-type Product struct {
+type File struct {
 	gorm.Model
-	Code  string `json:"code"`
-	Price uint   `json:"price"`
+	FileName      string `json:"filename"`
+	FileSize      int64  `json:"size"`
+	FileHash      string `json:"hashed"`
+	DownloadCount uint64 `json:"download_count"`
 }

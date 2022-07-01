@@ -8,43 +8,43 @@ import (
 	"gorm.io/gorm"
 )
 
-func AddRow(product *models.Product) error {
+func AddRow(file *models.File) (uint, error) {
 	db, err := gorm.Open(sqlite.Open("test.db"), &gorm.Config{})
 	if err != nil {
-		return errors.New("can not connect with the database")
+		return 0, errors.New("can not connect with the database")
 	}
 
-	db.Create(&product)
-	return nil
+	db.Create(&file)
+	return file.ID, nil
 }
 
-func GetRow(product models.Product) (models.Product, error) {
+func GetRow(File models.File) (models.File, error) {
 	db, err := gorm.Open(sqlite.Open("test.db"), &gorm.Config{})
-	var userProduct models.Product
+	var userFile models.File
 
 	if err != nil {
-		return userProduct, errors.New("can not connect with the database")
+		return userFile, errors.New("can not connect with the database")
 	}
-	db.First(&userProduct, product)
+	db.First(&userFile, File)
 
-	if userProduct.Price == 0 {
-		return userProduct, errors.New("row cannot be found")
+	if userFile.ID == 0 {
+		return userFile, errors.New("row cannot be found")
 	}
 
-	return userProduct, nil
+	return userFile, nil
 }
 
-func GetAllRow() ([]models.Product, error) {
+func GetAllRow() ([]models.File, error) {
 	db, err := gorm.Open(sqlite.Open("test.db"), &gorm.Config{})
 
-	var userProduct []models.Product
+	var userFile []models.File
 
 	if err != nil {
-		return userProduct, errors.New("can not connect with the database")
+		return userFile, errors.New("can not connect with the database")
 	}
-	db.Find(&userProduct)
+	db.Find(&userFile)
 
-	return userProduct, nil
+	return userFile, nil
 
 }
 
@@ -53,5 +53,5 @@ func MakeMigration() {
 	if err != nil {
 		panic(err)
 	}
-	db.AutoMigrate(&models.Product{})
+	db.AutoMigrate(&models.File{})
 }
