@@ -10,3 +10,13 @@ this will response with unique url
 ```shell
 $ curl -O -J "url"
 ```
+
+## Install
+
+Build using below commands 
+```shell
+$ go build -o filehost main.go
+
+```
+
+run `./filehost` as service or executable.
