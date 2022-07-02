@@ -1,7 +1,5 @@
 package main
 
-// Never ever panic in the routing the request
-
 import (
 	"crypto/sha256"
 	"encoding/hex"
@@ -93,13 +91,14 @@ func uploadFile(c *fiber.Ctx) error {
 }
 
 func main() {
+
 	db.MakeMigration()
 	app := fiber.New()
 
-	app.Get("/all", home)
-
 	app.Post("/", uploadFile)
 	app.Get("/:file", getFile)
+	app.Get("/all", home)
+
 	log.Fatal(app.Listen(":8000"))
 
 }
