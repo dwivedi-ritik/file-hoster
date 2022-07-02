@@ -14,6 +14,9 @@ import (
 	"github.com/gofiber/fiber/v2"
 )
 
+var ALPHABET string = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"
+var base int = 62
+
 func getFileHashValue(arg string) string {
 	h := sha256.New()
 	h.Write([]byte(arg))
@@ -22,8 +25,6 @@ func getFileHashValue(arg string) string {
 }
 
 func Encode(num int) string {
-	ALPHABET := "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"
-	base := len(ALPHABET)
 	var s strings.Builder
 	for num > 0 {
 		c := string(ALPHABET[num%base])
@@ -41,8 +42,6 @@ func Encode(num int) string {
 }
 
 func Decode(encoded string) int {
-	ALPHABET := "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"
-	base := len(ALPHABET)
 	n := 0
 	for i := 0; i < len(encoded); i++ {
 		n = n*base + strings.Index(ALPHABET, string(encoded[i]))
@@ -60,12 +59,15 @@ func home(c *fiber.Ctx) error {
 
 func getFile(c *fiber.Ctx) error {
 	params := c.Params("file")
+	if params == "favicon.ico" {
+		return c.Status(405).JSON(fiber.Map{"errors": [1]string{"Request with the shorten id"}})
+	}
 	id_ := Decode(params)
 	var GetFile models.File
 	GetFile.ID = uint(id_)
 	fetchedFile, err := db.GetRow(GetFile)
 	if err != nil {
-		return c.SendStatus(400)
+		return c.Status(400).JSON(fiber.Map{"errors": "could not found any file"})
 	}
 	return c.Download("./Uploads/"+fetchedFile.FileHash, fetchedFile.FileName)
 
