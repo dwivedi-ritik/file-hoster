@@ -1,11 +1,11 @@
-### A File Hoster written in Go 
+## A File Hosting server written in Go 
 
-A lightweight file hoster server that can host your file.
+A lightweight file hosting server that can host your file.
 
 ```shell
 $ curl -F "data=@yourfilename" 
 ```
-this will response with unique url
+this will respond with the unique url.
 
 ```shell
 $ curl -O -J "url"
