@@ -13,7 +13,8 @@ import (
 )
 
 var ALPHABET string = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"
-var base int = 62
+var BASE int = 62
+var MAXSIZE int = 200 // MAX SIZE 200MB
 
 func getFileHashValue(arg string) string {
 	h := sha256.New()
@@ -25,9 +26,9 @@ func getFileHashValue(arg string) string {
 func Encode(num int) string {
 	var s strings.Builder
 	for num > 0 {
-		c := string(ALPHABET[num%base])
+		c := string(ALPHABET[num%BASE])
 		s.WriteString(c)
-		num = num / base
+		num = num / BASE
 	}
 
 	org := s.String()
@@ -42,7 +43,7 @@ func Encode(num int) string {
 func Decode(encoded string) int {
 	n := 0
 	for i := 0; i < len(encoded); i++ {
-		n = n*base + strings.Index(ALPHABET, string(encoded[i]))
+		n = n*BASE + strings.Index(ALPHABET, string(encoded[i]))
 	}
 	return n
 }
@@ -93,7 +94,9 @@ func uploadFile(c *fiber.Ctx) error {
 func main() {
 
 	db.MakeMigration()
-	app := fiber.New()
+	app := fiber.New(fiber.Config{
+		BodyLimit: MAXSIZE * 1024 * 1024,
+	})
 
 	app.Post("/", uploadFile)
 	app.Get("/:file", getFile)
