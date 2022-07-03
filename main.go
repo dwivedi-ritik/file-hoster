@@ -12,9 +12,11 @@ import (
 	"github.com/gofiber/fiber/v2"
 )
 
-var ALPHABET string = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"
-var BASE int = 62
-var MAXSIZE int = 200 // MAX SIZE 200MB
+const (
+	ALPHABET string = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"
+	BASE     int    = 62
+	MAXSIZE  int    = 200 // MAX SIZE 200MB
+)
 
 func getFileHashValue(arg string) string {
 	h := sha256.New()
