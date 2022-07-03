@@ -22,7 +22,7 @@ $ go build -o filehost main.go
 run `./filehost` as service or executable.
 
 ## TODOS
-[] - URL Shortner.
-[] - Once file retrived it should be delete.
-[] - Set Download count limit.
-[] - Making it more structured.
+- []  URL Shortner.
+- []  Once file retrived it should be delete.
+- []  Set Download count limit.
+- []  Making it more structured.
