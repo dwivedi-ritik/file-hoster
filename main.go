@@ -102,7 +102,7 @@ func main() {
 
 	app.Post("/", uploadFile)
 	app.Get("/:file", getFile)
-	app.Get("/all", home)
+	app.Get("/db/all", home)
 
 	log.Fatal(app.Listen(":8000"))
 

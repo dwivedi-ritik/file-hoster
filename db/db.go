@@ -2,14 +2,24 @@ package db
 
 import (
 	"errors"
+	"os"
+	"path/filepath"
 
 	"github.com/dwivedi-ritik/filehost-go/models"
 	"gorm.io/driver/sqlite"
 	"gorm.io/gorm"
 )
 
+var (
+	DB_PATH string = dbPath()
+)
+
+func dbPath() string {
+	return filepath.Join(os.Getenv("HOME"), ".config/filehost/database.db")
+}
+
 func AddRow(file *models.File) (uint, error) {
-	db, err := gorm.Open(sqlite.Open("test.db"), &gorm.Config{})
+	db, err := gorm.Open(sqlite.Open(DB_PATH), &gorm.Config{})
 	if err != nil {
 		return 0, errors.New("can not connect with the database")
 	}
@@ -19,7 +29,7 @@ func AddRow(file *models.File) (uint, error) {
 }
 
 func GetRow(File models.File) (models.File, error) {
-	db, err := gorm.Open(sqlite.Open("test.db"), &gorm.Config{})
+	db, err := gorm.Open(sqlite.Open(DB_PATH), &gorm.Config{})
 	var userFile models.File
 
 	if err != nil {
@@ -35,7 +45,7 @@ func GetRow(File models.File) (models.File, error) {
 }
 
 func GetAllRow() ([]models.File, error) {
-	db, err := gorm.Open(sqlite.Open("test.db"), &gorm.Config{})
+	db, err := gorm.Open(sqlite.Open(DB_PATH), &gorm.Config{})
 
 	var userFile []models.File
 
@@ -49,7 +59,7 @@ func GetAllRow() ([]models.File, error) {
 }
 
 func MakeMigration() {
-	db, err := gorm.Open(sqlite.Open("test.db"), &gorm.Config{})
+	db, err := gorm.Open(sqlite.Open(DB_PATH), &gorm.Config{})
 	if err != nil {
 		panic(err)
 	}

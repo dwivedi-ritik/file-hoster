@@ -8,12 +8,15 @@ $ curl -F "data=@yourfilename"
 this will respond with the unique url.
 
 ```shell
-$ curl -O -J "url"
+$ curl -JO "url"
 ```
 
 ## Install
 
-Build using below commands 
+- if you are on linux machine just run `setup.sh`.
+- setup will create a database directory at `$HOME/.config/filehost/database.db`.
+- and add aliad to your default shell.
+- or you can build using below commands 
 ```shell
 $ go build -o filehost main.go
 
