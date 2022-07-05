@@ -15,14 +15,14 @@ $ curl -JO "url"
 
 - if you are on linux machine just run `setup.sh`.
 - setup will create a database directory at `$HOME/.config/filehost/database.db`.
-- and add aliad to your default shell.
+- and add alias to your default shell.
 - or you can build using below commands 
 ```shell
 $ go build -o filehost main.go
 
 ```
 
-run `./filehost` as service or executable.
+run command `filehost` in your shell or `filehost &` for running in background.
 
 ## TODOS
 - [ ]  URL Shortner.
