@@ -40,6 +40,8 @@ func GetRow(File models.File) (models.File, error) {
 	if userFile.ID == 0 {
 		return userFile, errors.New("row cannot be found")
 	}
+	userFile.DownloadCount++
+	db.Save(&userFile)
 
 	return userFile, nil
 }
