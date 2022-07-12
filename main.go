@@ -5,6 +5,8 @@ import (
 	"encoding/hex"
 	"fmt"
 	"log"
+	"os"
+	"path/filepath"
 	"strings"
 
 	"github.com/dwivedi-ritik/filehost-go/db"
@@ -18,6 +20,13 @@ const (
 	MAXSIZE  int    = 200 // MAX SIZE 200MB
 )
 
+var (
+	UPLOAD_PATH = uploadPath()
+)
+
+func uploadPath() string {
+	return filepath.Join(os.Getenv("HOME"), ".config/filehost/Uploads")
+}
 func getFileHashValue(arg string) string {
 	h := sha256.New()
 	h.Write([]byte(arg))
@@ -70,7 +79,7 @@ func getFile(c *fiber.Ctx) error {
 	if err != nil {
 		return c.Status(400).JSON(fiber.Map{"errors": "could not found any file"})
 	}
-	return c.Download("./Uploads/"+fetchedFile.FileHash, fetchedFile.FileName)
+	return c.Download(fmt.Sprintf("%s/%s", UPLOAD_PATH, fetchedFile.FileHash), fetchedFile.FileName)
 
 }
 
@@ -87,7 +96,7 @@ func uploadFile(c *fiber.Ctx) error {
 
 	id, _ := db.AddRow(&newFileEntry)
 
-	c.SaveFile(file, fmt.Sprintf("./Uploads/%s", fileHash))
+	c.SaveFile(file, fmt.Sprintf("%s/%s", UPLOAD_PATH, fileHash))
 
 	new_url := Encode(int(id))
 	return c.SendString(c.Hostname() + "/" + new_url)
